@@ -107,6 +107,18 @@ body { overflow-y: auto; }
   .footer-links { display: flex; gap: 16px; }
   .footer-links a { color: var(--muted); text-decoration: none; }
   .footer-links a:hover { color: var(--green); }
+
+  /* BOOT SEQUENCE */
+  .boot-line { opacity: 0; }
+  .boot-line.visible { animation: bootfade 0.3s ease forwards; }
+  @keyframes bootfade { from { opacity:0; transform:translateX(-6px); } to { opacity:1; transform:translateX(0); } }
+
+  /* STATS COUNT UP */
+  .stat-value { transition: color 0.3s; }
+
+  /* SECTION HEADER FADE IN */
+  .section-header { opacity: 0; transform: translateY(10px); transition: opacity 0.5s ease, transform 0.5s ease; }
+  .section-header.visible { opacity: 1; transform: translateY(0); }
 </style>
 </head>
 <body>
@@ -291,5 +303,58 @@ body { overflow-y: auto; }
   </footer>
 
 </main>
+
+<script>
+  // BOOT SEQUENCE - type out lines one by one
+  const bootLines = document.querySelectorAll('.boot-line');
+  bootLines.forEach((line, i) => {
+    setTimeout(() => { line.classList.add('visible'); }, 300 + i * 400);
+  });
+
+  // STATS COUNT UP on scroll
+  const statValues = document.querySelectorAll('.stat-value');
+  const targets = [];
+  statValues.forEach(el => {
+    const raw = el.textContent.trim();
+    const num = parseInt(raw);
+    if (!isNaN(num)) {
+      targets.push({ el, target: num, suffix: raw.replace(num, '') });
+      el.textContent = '0' + raw.replace(num, '');
+    }
+  });
+
+  function countUp(entry) {
+    if (!entry.isIntersecting) return;
+    targets.forEach(({ el, target, suffix }) => {
+      let start = 0;
+      const duration = 1200;
+      const step = 16;
+      const increment = target / (duration / step);
+      const timer = setInterval(() => {
+        start += increment;
+        if (start >= target) { el.textContent = target + suffix; clearInterval(timer); return; }
+        el.textContent = Math.floor(start) + suffix;
+      }, step);
+    });
+    statsObserver.unobserve(entry.target);
+  }
+
+  const statsObserver = new IntersectionObserver((entries) => entries.forEach(countUp), { threshold: 0.3 });
+  const statsEl = document.querySelector('.stats');
+  if (statsEl) statsObserver.observe(statsEl);
+
+  // SECTION HEADERS fade in on scroll
+  const headers = document.querySelectorAll('.section-header');
+  const headerObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        headerObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+  headers.forEach(h => headerObserver.observe(h));
+</script>
+
 </body>
 </html>
