@@ -31,7 +31,7 @@
   .boot-line.visible { animation: bootfade 0.3s ease forwards; }
   @keyframes bootfade { from { opacity:0; transform:translateX(-6px); } to { opacity:1; transform:translateX(0); } }
   .stats { display: flex; gap: 1px; margin: 40px 0; border: 1px solid var(--border); }
-  .stat { flex: 1; padding: 20px; background: var(--bg2); text-align: center; border-right: 1px solid var(--border); }
+  .stat { flex: 1; padding: 20px; background: var(--bg2); text-align: center; border-right: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
   .stat:last-child { border-right: none; }
   .stat-value { font-size: 28px; font-weight: 700; color: var(--green); display: block; transition: color 0.3s; }
   .stat-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 4px; }
@@ -83,8 +83,9 @@
     
     /* Stats row - 2x2 grid on mobile */
     .stats { flex-wrap: wrap; }
-    .stat { flex: 1 1 45%; border-right: none !important; border-bottom: 1px solid var(--border); }
+    .stat { flex: 1 1 45%; border-right: none !important; border-bottom: 1px solid var(--border); min-height: 90px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
     .stat-value { font-size: 22px; }
+    .stat-value[style*="font-size:13px"] { font-size: 13px !important; }
     .stat-label { font-size: 9px; }
 
     /* Terminal */
@@ -174,10 +175,10 @@
   </div>
 
   <div class="stats" id="stats">
-    <div class="stat"><span class="stat-value">10+</span><span class="stat-label">marketing experience</span></div>
+    <div class="stat"><span class="stat-value">10+</span><span class="stat-label">years marketing experience</span></div>
     <div class="stat"><span class="stat-value">5+</span><span class="stat-label">web3 companies incl. Gemini, Nifty Gateway</span></div>
     <div class="stat"><span class="stat-value">50+</span><span class="stat-label">high impact campaigns</span></div>
-    <div class="stat"><span class="stat-value">Created with Astra</span><span class="stat-label">personal AI stack — <a href="https://medium.com/@romerojr/i-built-my-own-ai-stack-i-called-it-astra-92c5f9c2c074" target="_blank" style="color:var(--green);text-decoration:none;border-bottom:1px solid var(--green);">learn more</a></span></div>
+    <div class="stat"><span class="stat-value" style="font-size:13px;line-height:1.2;font-weight:700;padding-top:8px;">Created with Astra</span><span class="stat-label">personal AI stack — <a href="https://medium.com/@romerojr/i-built-my-own-ai-stack-i-called-it-astra-92c5f9c2c074" target="_blank" style="color:var(--green);text-decoration:none;border-bottom:1px solid var(--green);">learn more</a></span></div>
   </div>
 
   <div class="terminal">
