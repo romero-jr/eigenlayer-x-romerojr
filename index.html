@@ -14,26 +14,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Romero Jr x Eigen Layer</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700;800&family=Space+Mono:wght@400;700&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
     --bg: #000000; --bg2: #0a0a0a; --bg3: #111111;
-    --border: #2a2a2a; --border2: #3a3a3a;
+    --border: #1a3a1a; --border2: #3a3a3a;
     --green: #39ff14; --green-dim: #28cc0f; --green-muted: rgba(57,255,20,0.08);
     --amber: #ff8c00; --red: #ff4444; --text: #e0e0e0; --muted: #666;
     --font: 'JetBrains Mono', 'Space Mono', monospace;
   }
-  html, body { height: 100%; background: var(--bg); color: var(--text); font-family: var(--font); font-size: 13px; line-height: 1.6; overflow-x: hidden; }
+  html, body { height: 100%; background: var(--bg); color: var(--text); font-family: var(--font); font-size: 14px; line-height: 1.8; overflow-x: hidden; }
   body { overflow-y: auto; }
   body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px); pointer-events: none; z-index: 9999; }
   .os-header { border-bottom: 1px solid var(--border); padding: 10px 24px; display: flex; align-items: center; justify-content: space-between; background: var(--bg2); position: sticky; top: 0; z-index: 100; }
-  .os-path { color: var(--green); font-size: 11px; }
+  .os-path { color: var(--green); font-size: 11px; text-shadow: 0 0 8px rgba(57,255,20,0.6); }
   .os-path span { color: var(--muted); }
   .os-status { display: flex; gap: 8px; align-items: center; }
   .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s ease-in-out infinite; }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
   .status-text { font-size: 10px; color: var(--muted); }
-  .os-main { max-width: 900px; margin: 0 auto; padding: 48px 24px; }
+  .os-main { max-width: 900px; margin: 0 auto; padding: 64px 32px; }
   .boot-line { font-size: 11px; color: var(--muted); margin-bottom: 4px; opacity: 0; }
   .boot-line .cmd { color: var(--green); }
   .boot-line .comment { color: #444; }
@@ -42,30 +42,30 @@
   .stats { display: flex; gap: 1px; margin: 40px 0; border: 1px solid var(--border); }
   .stat { flex: 1; padding: 20px; background: var(--bg2); text-align: center; border-right: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
   .stat:last-child { border-right: none; }
-  .stat-value { font-size: 28px; font-weight: 700; color: var(--green); display: block; transition: color 0.3s; }
+  .stat-value { font-size: 28px; font-weight: 800; color: var(--green); display: block; transition: color 0.3s; text-shadow: 0 0 8px rgba(57,255,20,0.6), 0 0 20px rgba(57,255,20,0.3); }
   .stat-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 4px; }
-  .terminal { background: var(--bg2); border: 1px solid var(--border); padding: 20px 24px; margin: 32px 0; }
+  .terminal { background: var(--bg2); border: 1px solid var(--border); padding: 28px 32px; margin: 40px 0; }
   .terminal-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
   .dot { width: 10px; height: 10px; border-radius: 50%; }
   .dot.r { background: #ff5f57; } .dot.y { background: #febc2e; } .dot.g { background: #28c840; }
   .terminal-title { font-size: 10px; color: var(--muted); margin-left: 8px; }
-  .t-line { display: flex; gap: 8px; margin-bottom: 6px; font-size: 12px; }
-  .t-prompt { color: var(--green); user-select: none; }
+  .t-line { display: flex; gap: 8px; margin-bottom: 10px; font-size: 13px; }
+  .t-prompt { color: var(--green); user-select: none; text-shadow: 0 0 6px rgba(57,255,20,0.7); }
   .t-cmd { color: var(--text); }
-  .t-output { color: var(--muted); font-size: 11px; padding-left: 20px; margin-bottom: 8px; }
+  .t-output { color: var(--muted); font-size: 12px; padding-left: 20px; margin-bottom: 12px; }
   .t-flag { color: var(--amber); }
   .cursor { display: inline-block; width: 8px; height: 13px; background: var(--green); animation: blink 1s step-end infinite; vertical-align: middle; }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
   @keyframes pepe-bob { 0%,100%{transform:translateY(0) rotate(3deg)} 50%{transform:translateY(-8px) rotate(-3deg)} }
-  .section { margin: 48px 0; }
-  .section-header { display: flex; align-items: center; gap: 16px; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 20px; opacity: 0; transform: translateY(10px); transition: opacity 0.5s ease, transform 0.5s ease; }
+  .section { margin: 64px 0; }
+  .section-header { display: flex; align-items: center; gap: 16px; font-size: 10px; color: var(--green); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 20px; opacity: 0; transform: translateY(10px); transition: opacity 0.5s ease, transform 0.5s ease; text-shadow: 0 0 6px rgba(57,255,20,0.5); }
   .section-header::after { content: ''; flex: 1; height: 1px; background: var(--border); }
   .section-header.visible { opacity: 1; transform: translateY(0); }
   .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
-  .card { background: var(--bg2); padding: 20px; transition: background 0.15s; cursor: pointer; }
+  .card { background: var(--bg2); padding: 28px; transition: background 0.15s; cursor: pointer; }
   .card:hover { background: var(--bg3); }
-  .card-tag { font-size: 9px; color: var(--green); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; }
-  .card-title { font-size: 13px; color: #fff; font-weight: 500; margin-bottom: 6px; }
+  .card-tag { font-size: 9px; color: var(--green); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; text-shadow: 0 0 6px rgba(57,255,20,0.5); }
+  .card-title { font-size: 14px; color: #fff; font-weight: 700; margin-bottom: 8px; }
   .card-desc { font-size: 11px; color: var(--muted); line-height: 1.7; }
   .data-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
   .data-table th { text-align: left; font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); padding: 8px 12px; border-bottom: 1px solid var(--border); }
